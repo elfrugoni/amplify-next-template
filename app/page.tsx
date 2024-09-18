@@ -31,13 +31,27 @@ export default function App() {
     });
   }
 
+  function deleteTodo(id: string) {
+    client.models.Todo.delete({ id })
+      .then(() => {
+        // Atualize a lista de tarefas após a exclusão
+        setTodos(todos.filter(todo => todo.id !== id));
+      })
+      .catch(error => {
+        console.error("Erro ao excluir a tarefa:", error);
+      });
+  }
+
   return (
     <main>
       <h1>My todos</h1>
       <button onClick={createTodo}>+ new</button>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.content}</li>
+          <li key={todo.id}>
+            {todo.content}
+            <button onClick={() => deleteTodo(todo.id)}>Excluir</button>
+          </li>
         ))}
       </ul>
       <div>
@@ -50,3 +64,4 @@ export default function App() {
     </main>
   );
 }
+
